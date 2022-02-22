@@ -1,45 +1,49 @@
+import React,{useState} from 'react'
 import ExpenseItem from "./ExpenseItem";
-import ExpenseForm from "./ExpenseForm";
+import ExpenseForm from './ExpenseForm';
+import ExpenseFilter from "./ExpenseFilter";
 
-function App() {
-  const expenses = [
-    {
-      id:0,
-      title: 'Book',
-      amount: 20,
-      date: new Date(2020, 2, 29),
-    },
-    {
-      id:0,
-      title: 'Iphone',
-      amount: 25,
-      date: new Date(2021, 2, 21),
-    },
+
+const expenses_list = [
   {
     id:0,
-    title: 'Laptop',
-    amount: 30,
-    date: new Date(2022, 4, 10),
+    title: 'Book',
+    amount: 20,
+    date: new Date(2020, 2, 29),
   },
-  ]
+  {
+    id:1,
+    title: 'Iphone',
+    amount: 25,
+    date: new Date(2021, 2, 21),
+  },
+{
+  id:2,
+  title: 'Laptop',
+  amount: 30,
+  date: new Date(2022, 4, 10),
+},
+]
+function App() {
+ const [itemList, setItemList]=useState(expenses_list)
+
+
+ const addExpenseHandler = (expense)=>{
+   setItemList((prevExpenses)=>{
+     return([...prevExpenses, expense])
+   })
+ }
   return (
-    <div className="App">
-      <ExpenseForm/>
-      <ExpenseItem
-     date={expenses[0].date}
-     title={expenses[0].title}
-     amount={expenses[0].amount}
-     />
-        <ExpenseItem
-     date={expenses[1].date}
-     title={expenses[1].title}
-     amount={expenses[1].amount}
-     />
-        <ExpenseItem
-     date={expenses[2].date}
-     title={expenses[2].title}
-     amount={expenses[2].amount}
-     />
+    <div className="app">
+      <ExpenseForm onSaveExpenseData={addExpenseHandler}/>
+      <ExpenseFilter/>
+    { itemList.map((expense)=>(<ExpenseItem
+      key = {expense.id}
+      date={expense.date}
+      title={expense.title}
+      amount={expense.amount}
+     />)) }
+      
     </div>
   );
 }

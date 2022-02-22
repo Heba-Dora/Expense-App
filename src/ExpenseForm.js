@@ -1,10 +1,12 @@
 import React,{useState} from 'react'
 import './ExpenseForm.css'
 
-function ExpenseForm() {
+function ExpenseForm(props) {
     const [title, setTitle]= useState('')
     const [amount, setAmount]= useState('')
     const [date, setDate]= useState('')
+    const [itemList, setItemList]=useState([])
+   
 
 
     const titleHandler = (event)=>{
@@ -19,18 +21,32 @@ function ExpenseForm() {
         setDate(event.target.value)
     }
 
-    const submitHandler = (event) =>{
-        event.preventDefault()
-
-        const expenseDate= {
-            title: title,
-            amount: amount,
-            date: new Date (date),
-        }
-        setTitle('')
-        setAmount('')
-        setDate('')
-    }
+   const submitHandler=(event)=>{
+    event.preventDefault()
+    const expenseData = {
+        id: Date.now(),
+        title: title,
+        amount: amount,
+        date: new Date(date),
+      };
+  
+      props.onSaveExpenseData(expenseData);
+      setTitle('');
+      setAmount('');
+      setDate('');
+    };
+   
+   
+    // const submitHandler = (event) =>{{}
+    //     event.preventDefault()
+    //     setItemList([...itemList, {title: title,
+    //         amount: amount,
+    //         date: new Date (date),}])
+        
+    //     setTitle('')
+    //     setAmount('')
+    //     setDate('')
+    // }
   return (
       <form onSubmit={submitHandler}>
     <div className='form' >
@@ -49,7 +65,7 @@ function ExpenseForm() {
             <input type="date" value={date}
             onChange={dateHandler} min='01,01,2019' max='31,12,2022'/>
         </div>
-        <button>Add Expenses</button>
+        <button type='submit'>Add Expenses</button>
     </div>
     </form>
   )
