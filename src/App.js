@@ -26,6 +26,16 @@ const expenses_list = [
 ]
 function App() {
  const [itemList, setItemList]=useState(expenses_list)
+ const [filtered, setFiltered] = useState('')
+ const [addNew, setAddNew]= useState('')
+
+ const filterHandler = (selectedYear) =>{
+   setFiltered(selectedYear)
+
+ }
+ const filterExpense = itemList.filter(expense => {
+   return expense.date.getFullYear().toString() === filtered
+ })
 
 
  const addExpenseHandler = (expense)=>{
@@ -33,11 +43,21 @@ function App() {
      return([...prevExpenses, expense])
    })
  }
+
+ const addNewHandler = ()=>{
+   setAddNew(true)
+ }
+
+
   return (
     <div className="app">
-      <ExpenseForm onSaveExpenseData={addExpenseHandler}/>
-      <ExpenseFilter/>
-    { itemList.map((expense)=>(<ExpenseItem
+      <div>
+      {!addNew && <button onClick={addNewHandler}>Add New Expenses</button>}
+      {addNew && <ExpenseForm onSaveExpenseData={addExpenseHandler}/>}
+      </div>
+      <ExpenseFilter selected={filtered} 
+      onChangeFilter={filterHandler} />
+    { filterExpense.map((expense)=>(<ExpenseItem
       key = {expense.id}
       date={expense.date}
       title={expense.title}
